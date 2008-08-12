@@ -27,15 +27,20 @@ public class PluginImpl extends Plugin {
 			public void check() throws IOException, ServletException {
 				
 				String pattern = req.getParameter("value");
+				
+				if (pattern==null || pattern.trim().length()==0){
+					error((new StringBuilder()).append("You must provide a pattern value").toString());
+				}
+				
 				try{
 					new SimpleDateFormat(pattern);
 				}
 				catch (NullPointerException npe){
-					error((new StringBuilder()).append("Wrong pattern. ").append(npe.getMessage()).toString());
+					error((new StringBuilder()).append("Invalid input: ").append(npe.getMessage()).toString());
 					return;
 				}				
 				catch (IllegalArgumentException iae){
-					error((new StringBuilder()).append("Wrong pattern. ").append(iae.getMessage()).toString());
+					error((new StringBuilder()).append("Invalid input: ").append(iae.getMessage()).toString());
 					return;
 				}
 				
