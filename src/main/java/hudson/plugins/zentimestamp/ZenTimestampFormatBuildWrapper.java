@@ -1,18 +1,19 @@
 package hudson.plugins.zentimestamp;
 
+import hudson.Extension;
+import hudson.Launcher;
 import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
-import hudson.model.Descriptor;
 import hudson.tasks.BuildWrapper;
 
-import java.io.IOException;
+import hudson.tasks.BuildWrapperDescriptor;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
+import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
 
@@ -28,7 +29,7 @@ import org.kohsuke.stapler.StaplerRequest;
  * to remember the configuration.
  *
  * <p>
- * When a build is performed, the {@link #perform(Build, Launcher, BuildListener)} method
+ * When a build is performed, the {@link #perform(AbstractBuild, Launcher, BuildListener)} method
  * will be invoked. 
  *
  * @author Gregory BOISSINOT - Zenika
@@ -47,7 +48,8 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 	}
 
 
-	public hudson.tasks.BuildWrapper.Environment setUp(hudson.model.AbstractBuild build, hudson.Launcher launcher, hudson.model.BuildListener listener) throws java.io.IOException, java.lang.InterruptedException{	
+	@Override
+	public hudson.tasks.BuildWrapper.Environment setUp(AbstractBuild build, Launcher launcher, BuildListener listener) throws java.io.IOException, java.lang.InterruptedException{	
 
 		final PrintStream logger = listener.getLogger();				
 		Calendar buildTimestamp = build.getTimestamp();
@@ -57,27 +59,13 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
         return new Environment() {
             
-        	@Override
+            @Override
             public void buildEnvVars(Map<String, String> env) {
-            	env.put("BUILD_ID", newBUILDIDStr);
-            }
-            
-            public boolean tearDown(AbstractBuild build, BuildListener listener) throws IOException, InterruptedException {
-                return true;
+                env.put("BUILD_ID", newBUILDIDStr);
             }
         };
     }
-	
-	
-	
-	public Descriptor<BuildWrapper> getDescriptor() {
-		return DESCRIPTOR;
-	}
 
-	/**
-     * Descriptor should be singleton.
-     */
-    public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
     /**
      * Descriptor for {@link ZenTimestampFormatBuildWrapper}. Used as a singleton.
@@ -87,9 +75,10 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
      * See <tt>views/hudson/plugins/zentimestamp/ZenTimestampFormatBuildWrapper/*.jelly</tt>
      * for the actual HTML fragment for the configuration screen.
      */
-    public static final class DescriptorImpl extends Descriptor<BuildWrapper> {
+    @Extension
+    public static final class DescriptorImpl extends BuildWrapperDescriptor {
 
-        DescriptorImpl() {
+        public DescriptorImpl() {
             super(ZenTimestampFormatBuildWrapper.class);
         }
 
@@ -100,14 +89,16 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
             return "Change BUILD_ID format";
         }
 
-        public boolean configure(HttpServletRequest req) throws FormException {
-            return super.configure(req);
+        @Override
+        public boolean isApplicable(AbstractProject<?, ?> item) {
+            return true;
         }
 
         /**
          * Creates a new instance of {@link ZenTimestampFormatBuildWrapper} from a submitted form.
          */
-        public ZenTimestampFormatBuildWrapper newInstance(StaplerRequest req) throws FormException {
+        @Override
+        public ZenTimestampFormatBuildWrapper newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             return new ZenTimestampFormatBuildWrapper(req.getParameter("zentimestamp.pattern"));
         }
     }	
