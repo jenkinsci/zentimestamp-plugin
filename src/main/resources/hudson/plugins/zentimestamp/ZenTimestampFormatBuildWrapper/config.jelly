@@ -1,7 +1,5 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <f:entry title="Date and Time Pattern" help="/plugin/zentimestamp/help-projectConfig.html">
-    <f:textbox name="zentimestamp.pattern" value="${instance.pattern}" 
-    	       checkUrl="'${rootURL}/plugin/zentimestamp/dateTimePatternCheck?value='+escape(this.value)"
-    	/>
+  <f:entry field="pattern" title="${%Date and Time Pattern}">
+        <f:textbox />
   </f:entry>
 </j:jelly>
