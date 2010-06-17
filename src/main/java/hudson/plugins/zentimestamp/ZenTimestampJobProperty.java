@@ -36,7 +36,7 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
     @Override
     public boolean prebuild(hudson.model.AbstractBuild<?, ?> abstractBuild, hudson.model.BuildListener buildListener) {
-        ZenTimestampLogger.log(buildListener, "Formating the BUILD_ID variable with'" + pattern + "' pattern.");
+        ZenTimestampLogger.log(buildListener, "Formating the BUILD_ID variable with '" + pattern + "' pattern.");
         abstractBuild.addAction(new ZenTimestampAction(pattern));
         return true;
     }
