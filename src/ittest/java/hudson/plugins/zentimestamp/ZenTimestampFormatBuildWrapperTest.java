@@ -13,24 +13,23 @@ public class ZenTimestampFormatBuildWrapperTest extends HudsonTestCase {
 
 
     public void testChangeBuildID() throws Exception {
-
+         
         final String BUILD_ID = "BUILD_ID";
 
         String pattern = "yyyyMMddHHmmss";
 
         FreeStyleProject project = createFreeStyleProject();
         project.getBuildersList().add(new Shell("echo ${" + BUILD_ID + "}"));
-        project.getBuildWrappersList().add(new ZenTimestampFormatBuildWrapper(pattern));
-
+        project.addProperty(new ZenTimestampJobProperty(true, pattern));
+                
         FreeStyleBuild build = project.scheduleBuild2(0).get();
 
         //Build status
         assertBuildStatus(Result.SUCCESS, build);
 
         //Build log
-        StringBuffer expectedLog = new StringBuffer();
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        expectedLog.append("echo " + dateFormat.format(build.getTime()));
+        StringBuffer expectedLog = new StringBuffer().append("echo ").append(dateFormat.format(build.getTime()));
         assertLogContains(expectedLog.toString(), build);
     }
 

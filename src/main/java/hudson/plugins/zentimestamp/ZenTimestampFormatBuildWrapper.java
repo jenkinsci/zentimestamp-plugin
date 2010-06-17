@@ -27,6 +27,7 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
     }
 
 
+    @SuppressWarnings("unused")
     public String getPattern() {
         return pattern;
     }
@@ -50,37 +51,25 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
         };
     }
 
-
-    /**
-     * Descriptor for {@link ZenTimestampFormatBuildWrapper}. Used as a singleton.
-     * The class is marked as public so that it can be accessed from views.
-     * <p/>
-     * <p/>
-     * See <tt>views/hudson/plugins/zentimestamp/ZenTimestampFormatBuildWrapper/*.jelly</tt>
-     * for the actual HTML fragment for the configuration screen.
-     */
     @Extension
+    @SuppressWarnings("unused")
     public static final class DescriptorImpl extends BuildWrapperDescriptor {
 
         public DescriptorImpl() {
             super(ZenTimestampFormatBuildWrapper.class);
         }
 
-        /**
-         * This human readable name is used in the configuration screen.
-         */
         public String getDisplayName() {
             return Messages.ZenTimestampFormatBuildWrapper_displayName();
         }
 
         @Override
         public boolean isApplicable(AbstractProject<?, ?> item) {
-            return true;
+            //Set to false in order to no display the feature
+            return false;
         }
 
-        /**
-         * Checks if the provided pattern is valuid
-         */
+        @SuppressWarnings("unused")
         public FormValidation doCheckPattern(@QueryParameter String value) {
 
             if (value == null || value.trim().length() == 0) {
@@ -99,8 +88,6 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
             return FormValidation.ok();
         }
-
-
     }
 
 }
