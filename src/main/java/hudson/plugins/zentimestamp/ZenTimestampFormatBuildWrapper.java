@@ -17,6 +17,9 @@ import java.util.Calendar;
 import java.util.Map;
 
 
+/**
+ * This wrapper is used for Hudson configuration set before zentimestamp 2.0
+ */
 public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
     private String pattern;
@@ -64,9 +67,15 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
         }
 
         @Override
+        /**
+         *  When set to false, the dedicated UI is not display and the build wrapper is not marshaled
+         * (The method is called before the save() method)
+         *  When set to true, the dedicated UI is display and the build wrapper is marshaled
+         */
         public boolean isApplicable(AbstractProject<?, ?> item) {
-            //Set to false in order to no display the feature
-            return false;
+            //When there is an old config.xml with a build wrapper, the backwardCompatibility is set to true at load time
+            //The value is set by the readResolve() method called when there is an old config.xml configured with this object
+            return backwardCompatibility;
         }
 
         @SuppressWarnings("unused")
@@ -88,6 +97,22 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
             return FormValidation.ok();
         }
+    }
+
+    /*package*/ static transient boolean backwardCompatibility = false;
+
+    /**
+     * Called at each object access
+     * @return the current wrapper without changes 
+     */
+    @SuppressWarnings("unused")
+    private Object readResolve() {
+        backwardCompatibility = true;
+        return this;
+    }
+
+    /*package*/ static boolean isConfigXMLWithPreviousVersion(){
+        return backwardCompatibility;
     }
 
 }
