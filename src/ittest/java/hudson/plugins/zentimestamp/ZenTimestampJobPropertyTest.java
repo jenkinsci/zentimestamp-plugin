@@ -9,7 +9,7 @@ import org.jvnet.hudson.test.HudsonTestCase;
 import java.text.SimpleDateFormat;
 
 
-public class ZenTimestampFormatBuildWrapperTest extends HudsonTestCase {
+public class ZenTimestampJobPropertyTest extends HudsonTestCase {
 
 
     public void testChangeBuildID() throws Exception {
