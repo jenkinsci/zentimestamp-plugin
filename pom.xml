@@ -37,14 +37,12 @@
     <profiles>
         <profile>
             <id>it</id>
-
             <build>
-
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>1.3</version>
+                        <version>1.5</version>
                         <executions>
                             <execution>
                                 <id>add-test-source</id>
