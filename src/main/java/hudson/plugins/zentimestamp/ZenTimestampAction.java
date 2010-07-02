@@ -11,6 +11,8 @@ public class ZenTimestampAction implements EnvironmentContributingAction {
 
     private String pattern;
 
+    private transient String buildIDValue;
+
     public ZenTimestampAction(String pattern) {
         this.pattern = pattern;
     }
