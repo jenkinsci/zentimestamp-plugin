@@ -65,7 +65,7 @@
     </profiles>
 
     <scm>
-    	<connection>scm:git@github.com:jenkinsci/zentimestamp-plugin.git</connection>
+    	<connection>scm:git://github.com/jenkinsci/zentimestamp-plugin.git</connection>
 	<developerConnection>scm:git@github.com:jenkinsci/zentimestamp-plugin.git</developerConnection>
     </scm>
 
