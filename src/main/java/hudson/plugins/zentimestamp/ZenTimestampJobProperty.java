@@ -37,13 +37,6 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
     }
 
     @Override
-    public boolean prebuild(hudson.model.AbstractBuild<?, ?> abstractBuild, hudson.model.BuildListener buildListener) {
-        ZenTimestampLogger.log(buildListener, "Formating the BUILD_ID variable with '" + pattern + "' pattern.");
-        abstractBuild.addAction(new ZenTimestampAction(pattern));
-        return true;
-    }
-
-    @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
         return true;
     }
@@ -103,8 +96,7 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                     //Create a new job property object
                     return new ZenTimestampJobProperty(true, pattern);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException("An error occurred during the migration of the previous plugin");
             }
 
@@ -120,11 +112,9 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
             try {
                 new SimpleDateFormat(value);
-            }
-            catch (NullPointerException npe) {
+            } catch (NullPointerException npe) {
                 return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(npe.getMessage()));
-            }
-            catch (IllegalArgumentException iae) {
+            } catch (IllegalArgumentException iae) {
                 return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(iae.getMessage()));
             }
 

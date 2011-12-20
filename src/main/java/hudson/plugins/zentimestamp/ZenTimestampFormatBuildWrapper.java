@@ -87,11 +87,9 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
             try {
                 new SimpleDateFormat(value);
-            }
-            catch (NullPointerException npe) {
+            } catch (NullPointerException npe) {
                 return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(npe.getMessage()));
-            }
-            catch (IllegalArgumentException iae) {
+            } catch (IllegalArgumentException iae) {
                 return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(iae.getMessage()));
             }
 
@@ -103,7 +101,8 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
     /**
      * Called at each object access
-     * @return the current wrapper without changes 
+     *
+     * @return the current wrapper without changes
      */
     @SuppressWarnings("unused")
     private Object readResolve() {
@@ -111,7 +110,8 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
         return this;
     }
 
-    /*package*/ static boolean isConfigXMLWithPreviousVersion(){
+    /*package*/
+    static boolean isConfigXMLWithPreviousVersion() {
         return backwardCompatibility;
     }
 
