@@ -24,8 +24,17 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
 
         String pattern = null;
 
-        //Get global pattern if any
+        //Global Node Properties
         for (NodeProperty<?> nodeProperty : Hudson.getInstance().getGlobalNodeProperties()) {
+            if (nodeProperty instanceof ZenTimestampNodeProperty) {
+                ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
+                pattern = envInjectNodeProperty.getPattern();
+            }
+        }
+
+        //Node
+        Node node = build.getBuiltOn();
+        for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
             if (nodeProperty instanceof ZenTimestampNodeProperty) {
                 ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
                 pattern = envInjectNodeProperty.getPattern();

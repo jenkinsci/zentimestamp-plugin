@@ -26,12 +26,12 @@ public class ZenTimestampNodeProperty extends NodeProperty<Node> {
     public static class ZenTimestampNodePropertyDescriptor extends NodePropertyDescriptor {
         @Override
         public String getDisplayName() {
-            return "Zentimestamp";
+            return "Date pattern for the BUILD_ID (build timestamp) variable";
         }
 
         @Override
         public String getHelpFile() {
-            return "/plugin/zentimestamp/help-pattern.html";
+            return "/plugin/zentimestamp/help-node.html";
         }
     }
 

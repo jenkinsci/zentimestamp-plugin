@@ -13,7 +13,7 @@ public class ZenTimestampJobPropertyTest extends HudsonTestCase {
 
 
     public void testChangeBuildID() throws Exception {
-         
+
         final String BUILD_ID = "BUILD_ID";
 
         String pattern = "yyyyMMddHHmmss";
@@ -21,7 +21,7 @@ public class ZenTimestampJobPropertyTest extends HudsonTestCase {
         FreeStyleProject project = createFreeStyleProject();
         project.getBuildersList().add(new Shell("echo ${" + BUILD_ID + "}"));
         project.addProperty(new ZenTimestampJobProperty(true, pattern));
-                
+
         FreeStyleBuild build = project.scheduleBuild2(0).get();
 
         //Build status
