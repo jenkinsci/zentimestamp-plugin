@@ -7,6 +7,7 @@ import hudson.model.EnvironmentContributingAction;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+@Deprecated
 public class ZenTimestampAction implements EnvironmentContributingAction {
 
     private String pattern;

@@ -1,29 +1,29 @@
 package hudson.plugins.zentimestamp;
 
-import hudson.Launcher;
+import hudson.EnvVars;
+import hudson.Extension;
 import hudson.model.*;
-import hudson.model.listeners.RunListener;
 import hudson.slaves.NodeProperty;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Map;
 
 /**
  * @author Gregory Boissinot
  */
-//@Extension
-public class ZenTimestampRunListener extends RunListener<Run> implements Serializable {
+@Extension
+public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
 
     @Override
-    public Environment setUpEnvironment(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
+    public void buildEnvironmentFor(Run r, EnvVars envs, TaskListener listener) throws IOException, InterruptedException {
+
+        AbstractBuild build = (AbstractBuild) r;
 
         String pattern = null;
 
-        //Global Node Properties
+        //Get pattern by global node properties
         for (NodeProperty<?> nodeProperty : Hudson.getInstance().getGlobalNodeProperties()) {
             if (nodeProperty instanceof ZenTimestampNodeProperty) {
                 ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
@@ -31,7 +31,7 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
             }
         }
 
-        //Node
+        //Get local node pattern and override it if any
         Node node = build.getBuiltOn();
         for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
             if (nodeProperty instanceof ZenTimestampNodeProperty) {
@@ -40,27 +40,20 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
             }
         }
 
-        //Override job pattern if any
+        //Get job pattern and override it if any
         if (isZenTimestampJobProperty(build.getParent())) {
             pattern = getZenTimestampJobProperty(build.getProject()).getPattern();
         }
 
-        if (pattern == null) {
-            return super.setUpEnvironment(build, launcher, listener);
+        //Process pattern
+        if (pattern != null) {
+            final PrintStream logger = listener.getLogger();
+            Calendar buildTimestamp = build.getTimestamp();
+            logger.println(String.format("Changing BUILD_ID variable (job build time) with the pattern %s.", pattern));
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            final String formattedBuildValue = sdf.format(buildTimestamp.getTime());
+            envs.put("BUILD_ID", formattedBuildValue);
         }
-
-        final PrintStream logger = listener.getLogger();
-        Calendar buildTimestamp = build.getTimestamp();
-        logger.println("Formatting the BUILD_ID variable with'" + pattern + "' pattern.");
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        final String formattedBuildValue = sdf.format(buildTimestamp.getTime());
-
-        return new Environment() {
-            @Override
-            public void buildEnvVars(Map<String, String> env) {
-                env.put("BUILD_ID", formattedBuildValue);
-            }
-        };
     }
 
     private boolean isZenTimestampJobProperty(Job job) {
@@ -74,5 +67,4 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
     private ZenTimestampJobProperty getZenTimestampJobProperty(Job project) {
         return (ZenTimestampJobProperty) project.getProperty(ZenTimestampJobProperty.class);
     }
-
 }
