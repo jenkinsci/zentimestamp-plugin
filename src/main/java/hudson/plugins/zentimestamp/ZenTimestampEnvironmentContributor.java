@@ -2,6 +2,7 @@ package hudson.plugins.zentimestamp;
 
 import hudson.EnvVars;
 import hudson.Extension;
+import hudson.matrix.MatrixRun;
 import hudson.model.*;
 import hudson.slaves.NodeProperty;
 
@@ -41,30 +42,28 @@ public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
         }
 
         //Get job pattern and override it if any
-        if (isZenTimestampJobProperty(build.getParent())) {
-            pattern = getZenTimestampJobProperty(build.getProject()).getPattern();
+        Job job = getJob(build);
+        ZenTimestampJobProperty zenTimestampJobProperty = (ZenTimestampJobProperty) job.getProperty(ZenTimestampJobProperty.class);
+        if (zenTimestampJobProperty != null) {
+            pattern = zenTimestampJobProperty.getPattern();
         }
 
         //Process pattern
         if (pattern != null) {
             final PrintStream logger = listener.getLogger();
             Calendar buildTimestamp = build.getTimestamp();
-            logger.println(String.format("Changing BUILD_ID variable (job build time) with the pattern %s.", pattern));
+            logger.println(String.format("Changing BUILD_ID variable (job build time) with the date pattern %s.", pattern));
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
             final String formattedBuildValue = sdf.format(buildTimestamp.getTime());
             envs.put("BUILD_ID", formattedBuildValue);
         }
     }
 
-    private boolean isZenTimestampJobProperty(Job job) {
-        ZenTimestampJobProperty zenTimestampJobProperty = (ZenTimestampJobProperty) job.getProperty(ZenTimestampJobProperty.class);
-        if (zenTimestampJobProperty != null) {
-            return zenTimestampJobProperty.isChangeBUILDID();
+    private Job getJob(AbstractBuild build) {
+        if (build instanceof MatrixRun) {
+            return ((MatrixRun) build).getParentBuild().getProject();
+        } else {
+            return build.getProject();
         }
-        return false;
-    }
-
-    private ZenTimestampJobProperty getZenTimestampJobProperty(Job project) {
-        return (ZenTimestampJobProperty) project.getProperty(ZenTimestampJobProperty.class);
     }
 }
