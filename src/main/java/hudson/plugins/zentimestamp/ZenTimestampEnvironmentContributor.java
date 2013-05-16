@@ -34,10 +34,14 @@ public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
 
         //Get local node pattern and override it if any
         Node node = build.getBuiltOn();
-        for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
-            if (nodeProperty instanceof ZenTimestampNodeProperty) {
-                ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
-                pattern = envInjectNodeProperty.getPattern();
+        //Check if the node is already up
+        // --> Build can be a previous build (case of polling) and the node can be no more exists
+        if (node != null) {
+            for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
+                if (nodeProperty instanceof ZenTimestampNodeProperty) {
+                    ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
+                    pattern = envInjectNodeProperty.getPattern();
+                }
             }
         }
 
