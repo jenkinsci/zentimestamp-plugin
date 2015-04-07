@@ -51,14 +51,14 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
 
         final PrintStream logger = listener.getLogger();
         Calendar buildTimestamp = build.getTimestamp();
-        logger.println("Formatting the BUILD_ID variable with'" + pattern + "' pattern.");
+        logger.println("Formatting the " + ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE + " variable with'" + pattern + "' pattern.");
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         final String formattedBuildValue = sdf.format(buildTimestamp.getTime());
 
         return new Environment() {
             @Override
             public void buildEnvVars(Map<String, String> env) {
-                env.put("BUILD_ID", formattedBuildValue);
+                env.put(ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE, formattedBuildValue);
             }
         };
     }
