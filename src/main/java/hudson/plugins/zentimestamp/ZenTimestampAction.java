@@ -12,6 +12,8 @@ public class ZenTimestampAction implements EnvironmentContributingAction {
 
     private String pattern;
 
+    public static final String BUILD_TIMESTAMP_VARIABLE="BUILD_TIMESTAMP";
+
     public ZenTimestampAction(String pattern) {
         this.pattern = pattern;
     }
@@ -21,7 +23,7 @@ public class ZenTimestampAction implements EnvironmentContributingAction {
         Calendar buildTimestamp = build.getTimestamp();
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         String formattedBUILDID = sdf.format(buildTimestamp.getTime());
-        env.put("BUILD_ID", formattedBUILDID);
+        env.put(BUILD_TIMESTAMP_VARIABLE, formattedBUILDID);
     }
 
     public String getDisplayName() {

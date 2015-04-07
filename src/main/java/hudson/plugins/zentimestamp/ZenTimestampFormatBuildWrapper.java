@@ -41,7 +41,7 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
         final PrintStream logger = listener.getLogger();
         Calendar buildTimestamp = build.getTimestamp();
-        logger.println("Formating the BUILD_ID variable with'" + pattern + "' pattern.");
+        logger.println("Formating the " + ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE + " variable with'" + pattern + "' pattern.");
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         final String newBUILDIDStr = sdf.format(buildTimestamp.getTime());
 
@@ -49,7 +49,7 @@ public class ZenTimestampFormatBuildWrapper extends BuildWrapper {
 
             @Override
             public void buildEnvVars(Map<String, String> env) {
-                env.put("BUILD_ID", newBUILDIDStr);
+                env.put(ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE, newBUILDIDStr);
             }
         };
     }

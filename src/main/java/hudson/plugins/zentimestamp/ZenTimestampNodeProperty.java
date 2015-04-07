@@ -26,7 +26,7 @@ public class ZenTimestampNodeProperty extends NodeProperty<Node> {
     public static class ZenTimestampNodePropertyDescriptor extends NodePropertyDescriptor {
         @Override
         public String getDisplayName() {
-            return "Date pattern for the BUILD_ID (build timestamp) variable";
+            return "Date pattern for the " + ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE + " (build timestamp) variable";
         }
 
         @Override
