@@ -9,7 +9,7 @@
 
     <artifactId>zentimestamp</artifactId>
     <packaging>hpi</packaging>
-    <version>4.1</version>
+    <version>4.2-SNAPSHOT</version>
     <name>Jenkins Zentimestamp plugin</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Zentimestamp+Plugin</url>
 
@@ -64,7 +64,7 @@
     <scm>
         <connection>scm:git:git://github.com/jenkinsci/zentimestamp-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/zentimestamp-plugin.git</developerConnection>
-      <tag>zentimestamp-4.1</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <dependencies>
