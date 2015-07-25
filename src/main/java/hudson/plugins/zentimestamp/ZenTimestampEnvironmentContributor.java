@@ -18,9 +18,7 @@ import java.util.Calendar;
 public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
 
     @Override
-    public void buildEnvironmentFor(Run r, EnvVars envs, TaskListener listener) throws IOException, InterruptedException {
-
-        AbstractBuild build = (AbstractBuild) r;
+    public void buildEnvironmentFor(Run run, EnvVars envs, TaskListener listener) throws IOException, InterruptedException {
 
         String pattern = null;
 
@@ -32,21 +30,26 @@ public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
             }
         }
 
-        //Get local node pattern and override it if any
-        Node node = build.getBuiltOn();
-        //Check if the node is already up
-        // --> Build can be a previous build (case of polling) and the node can be no more exists
-        if (node != null) {
-            for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
-                if (nodeProperty instanceof ZenTimestampNodeProperty) {
-                    ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
-                    pattern = envInjectNodeProperty.getPattern();
+        if (run instanceof AbstractBuild) {
+            AbstractBuild build = (AbstractBuild) run;
+
+            //Get local node pattern and override it if any
+            Node node = build.getBuiltOn();
+
+            //Check if the node is already up
+            // --> Build can be a previous build (case of polling) and the node can be no more exists
+            if (node != null) {
+                for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
+                    if (nodeProperty instanceof ZenTimestampNodeProperty) {
+                        ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
+                        pattern = envInjectNodeProperty.getPattern();
+                    }
                 }
             }
         }
 
         //Get job pattern and override it if any
-        Job job = getJob(build);
+        Job job = getJob(run);
         ZenTimestampJobProperty zenTimestampJobProperty = (ZenTimestampJobProperty) job.getProperty(ZenTimestampJobProperty.class);
         if (zenTimestampJobProperty != null) {
             pattern = zenTimestampJobProperty.getPattern();
@@ -55,7 +58,7 @@ public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
         //Process pattern
         if (pattern != null) {
             final PrintStream logger = listener.getLogger();
-            Calendar buildTimestamp = build.getTimestamp();
+            Calendar buildTimestamp = run.getTimestamp();
             //logger.println(String.format("Changing " + ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE + " variable (job build time) with the date pattern %s.", pattern));
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
             final String formattedBuildValue = sdf.format(buildTimestamp.getTime());
@@ -63,11 +66,11 @@ public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
         }
     }
 
-    private Job getJob(AbstractBuild build) {
-        if (build instanceof MatrixRun) {
-            return ((MatrixRun) build).getParentBuild().getProject();
+    private Job getJob(Run run) {
+        if (run instanceof MatrixRun) {
+            return ((MatrixRun) run).getParentBuild().getProject();
         } else {
-            return build.getProject();
+            return run.getParent();
         }
     }
 }
