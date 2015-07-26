@@ -1,3 +1,3 @@
 <div>
-  Plugin that allows the customization of the date and time pattern for the Jenkins BUILD_TIMESTAMP variable.
+  Plugin that populates a BUILD_TIMESTAMP environment variable.
 </div>

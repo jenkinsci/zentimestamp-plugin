@@ -66,7 +66,7 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
     private boolean isZenTimestampJobProperty(Job job) {
         ZenTimestampJobProperty zenTimestampJobProperty = (ZenTimestampJobProperty) job.getProperty(ZenTimestampJobProperty.class);
         if (zenTimestampJobProperty != null) {
-            return zenTimestampJobProperty.isChangeBUILDID();
+            return zenTimestampJobProperty.isExportBuildTimestampVar();
         }
         return false;
     }

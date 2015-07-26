@@ -1,8 +1,8 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 
-   <f:optionalBlock field="changeBUILDID" 
-                    title="${%BUILDIDOptionLabel}"
-                    checked="${instance.changeBUILDID}">
+   <f:optionalBlock field="exportBuildTimestampVar"
+                    title="${%exportBuildTimestampVarLabel}"
+                    checked="${instance.exportBuildTimestampVar}">
       <f:entry field="pattern" title="${%Date and Time Pattern}">
         <f:textbox/>
       </f:entry>

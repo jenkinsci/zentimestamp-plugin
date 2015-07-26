@@ -16,13 +16,15 @@ import java.util.Map;
 
 public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
-    private boolean changeBUILDID;
+    private transient boolean changeBUILDID;
+
+    private boolean exportBuildTimestampVar;
 
     private String pattern;
 
     @DataBoundConstructor
-    public ZenTimestampJobProperty(boolean changeBUILDID, String pattern) {
-        this.changeBUILDID = changeBUILDID;
+    public ZenTimestampJobProperty(boolean exportBuildTimestampVar, String pattern) {
+        this.exportBuildTimestampVar = exportBuildTimestampVar;
         this.pattern = pattern;
     }
 
@@ -32,8 +34,8 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
     }
 
     @SuppressWarnings("unused")
-    public boolean isChangeBUILDID() {
-        return changeBUILDID;
+    public boolean isExportBuildTimestampVar() {
+        return exportBuildTimestampVar;
     }
 
     @Override
@@ -64,13 +66,13 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
             String pattern = null;
 
             //Get the zentimestamp jobproperty, it's in piority
-            Object changeBUILDID = jsonObject.get("changeBUILDID");
+            Object exportBuildTimestampVar = jsonObject.get("exportBuildTimestampVar");
             try {
 
-                if (changeBUILDID != null) {
-                    pattern = ((JSONObject) changeBUILDID).getString("pattern");
+                if (exportBuildTimestampVar != null) {
+                    pattern = ((JSONObject) exportBuildTimestampVar).getString("pattern");
                     if ((pattern != null) && (pattern.trim().length() != 0)) {
-                        //Desactive the build wrapper
+                        //Desactivate the build wrapper
                         ZenTimestampFormatBuildWrapper.backwardCompatibility = false;
                         //Create a new job property object
                         return new ZenTimestampJobProperty(true, pattern);
@@ -91,7 +93,7 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                             pattern = ((ZenTimestampFormatBuildWrapper) wrapper).getPattern();
                         }
                     }
-                    //Desactive the build wrapper
+                    //Desactivate the build wrapper
                     ZenTimestampFormatBuildWrapper.backwardCompatibility = false;
                     //Create a new job property object
                     return new ZenTimestampJobProperty(true, pattern);
@@ -120,7 +122,13 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
             return FormValidation.ok();
         }
+    }
 
+    private Object readResolve() {
+        if (changeBUILDID) {
+            this.exportBuildTimestampVar = true;
+        }
+        return this;
     }
 
 }
