@@ -7,7 +7,6 @@ import hudson.model.*;
 import hudson.slaves.NodeProperty;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -59,8 +58,8 @@ public class ZenTimestampEnvironmentContributor extends EnvironmentContributor {
         if (pattern != null) {
             Calendar buildTimestamp = run.getTimestamp();
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-            final String formattedBuildValue = sdf.format(buildTimestamp.getTime());
-            envs.put(ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE, formattedBuildValue);
+            final String formattedBuildTimestampValue = sdf.format(buildTimestamp.getTime());
+            envs.put(ZenTimestampAction.BUILD_TIMESTAMP_VARIABLE, formattedBuildTimestampValue);
         }
     }
 
