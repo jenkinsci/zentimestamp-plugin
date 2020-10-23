@@ -1,0 +1,29 @@
+[[zentimestamp-plugin]]
+= Zentimestamp Plugin
+
+link:https://github.com/jenkinsci/zentimestamp-plugin/graphs/contributors[image:https://img.shields.io/github/contributors/jenkinsci/zentimestamp-plugin.svg[contributors]]
+link:https://plugins.jenkins.io/zentimestamp[image:https://img.shields.io/jenkins/plugin/v/zentimestamp.svg[plugin]]
+
+*This plugin is up for adoption.* Want to help improve this plugin?
+https://wiki.jenkins.io/display/JENKINS/Adopt+a+Plugin[Click here to
+learn more]!
+
+[[zentimestamp-plugin-description]]
+== Description
+
+From Jenkins 1.597, the plugin adds the Jenkins `+BUILD_TIMESTAMP+`
+variable to the Configure System page of Manage Jenkins.  Note: you must
+activate the Global Property! +
+You must specify a
+http://java.sun.com/javase/6/docs/api/java/text/SimpleDateFormat.html[java.text.SimpleDateFormat]
+pattern such as the value '`+yyyyMMddHHmmss+`'.
+
+[[zentimestamp-plugin-features]]
+== Features
+
+* Export a `+BUILD_TIMESTAMP+` variable to the Jenkins instance (all
+jobs on all slaves will be impacted).
+* Export a `+BUILD_TIMESTAMP+` variable to the slave (all jobs on this
+slave will be impacted).
+* Export a `+BUILD_TIMESTAMP+` variable to the job (only the job will be
+impacted)
