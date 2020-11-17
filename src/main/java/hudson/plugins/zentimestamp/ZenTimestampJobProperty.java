@@ -84,8 +84,6 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                 if (exportBuildTimestampVar != null) {
                     pattern = ((JSONObject) exportBuildTimestampVar).getString("pattern");
                     if ((pattern != null) && (pattern.trim().length() != 0)) {
-                        //Desactivate the build wrapper
-                        ZenTimestampFormatBuildWrapper.backwardCompatibility = false;
                         //Create a new job property object
                         return new ZenTimestampJobProperty(true, pattern);
                     }
