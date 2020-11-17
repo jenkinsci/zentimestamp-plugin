@@ -95,7 +95,7 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                     String jobName = (String) req.getSubmittedForm().get("name");
 
                     // Retrieve the previous job zentimestamp wrapper pattern
-                    Map<Descriptor<BuildWrapper>, BuildWrapper> mapWrappers = ((Project) (Items.getConfigFile(Hudson.getInstance().getItem(jobName)).read())).getBuildWrappers();
+                    Map<Descriptor<BuildWrapper>, BuildWrapper> mapWrappers = ((Project) (Items.getConfigFile(Hudson.get().getItem(jobName)).read())).getBuildWrappers();
                     for (Map.Entry<Descriptor<BuildWrapper>, BuildWrapper> entry : mapWrappers.entrySet()) {
                         BuildWrapper wrapper = entry.getValue();
                         if (wrapper.getClass() == ZenTimestampFormatBuildWrapper.class) {
