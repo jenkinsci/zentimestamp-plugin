@@ -1,16 +1,22 @@
 package hudson.plugins.zentimestamp;
 
-import hudson.Launcher;
-import hudson.model.*;
-import hudson.model.listeners.RunListener;
-import hudson.slaves.NodeProperty;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+
+import hudson.Launcher;
+import hudson.model.AbstractBuild;
+import hudson.model.BuildListener;
+import hudson.model.Environment;
+import hudson.model.Hudson;
+import hudson.model.Job;
+import hudson.model.Node;
+import hudson.model.Run;
+import hudson.model.listeners.RunListener;
+import hudson.slaves.NodeProperty;
 
 /**
  * @author Gregory Boissinot
@@ -33,10 +39,13 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
 
         //Node
         Node node = build.getBuiltOn();
-        for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
-            if (nodeProperty instanceof ZenTimestampNodeProperty) {
-                ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
-                pattern = envInjectNodeProperty.getPattern();
+
+        if (node != null) {
+            for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
+                if (nodeProperty instanceof ZenTimestampNodeProperty) {
+                    ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
+                    pattern = envInjectNodeProperty.getPattern();
+                }
             }
         }
 

@@ -107,8 +107,12 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                     //Create a new job property object
                     return new ZenTimestampJobProperty(true, pattern);
                 }
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 throw new RuntimeException("An error occurred during the migration of the previous plugin");
+            } catch (ServletException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             return null;
