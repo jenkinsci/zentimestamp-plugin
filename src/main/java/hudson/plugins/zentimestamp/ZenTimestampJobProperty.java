@@ -93,7 +93,6 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                 if (ZenTimestampFormatBuildWrapper.isConfigXMLWithPreviousVersion()) {
                     //Retrieve the current job by its name
                     String jobName = (String) req.getSubmittedForm().get("name");
-                    TopLevelItem topLevelItem = Hudson.getInstance().getItem(jobName);
 
                     // Retrieve the previous job zentimestamp wrapper pattern
                     Map<Descriptor<BuildWrapper>, BuildWrapper> mapWrappers = ((Project) (Items.getConfigFile(Hudson.getInstance().getItem(jobName)).read())).getBuildWrappers();
