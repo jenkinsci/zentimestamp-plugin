@@ -1,6 +1,9 @@
 [[zentimestamp-plugin-changelog]]
 = Changelog
 
+== Unreleased
+- Add Jenkinsfile
+
 == Release 4.2 (July 25, 2015)
 
 === Fixed
