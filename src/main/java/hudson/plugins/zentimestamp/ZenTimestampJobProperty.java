@@ -114,8 +114,6 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
             try {
                 new SimpleDateFormat(value);
-            } catch (NullPointerException npe) {
-                return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(npe.getMessage()));
             } catch (IllegalArgumentException iae) {
                 return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(iae.getMessage()));
             }
