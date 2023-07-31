@@ -1,5 +1,6 @@
 package hudson.plugins.zentimestamp;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.*;
@@ -9,6 +10,7 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -62,6 +64,7 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
 
         @SuppressWarnings("unchecked")
+        @SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
         public ZenTimestampJobProperty newInstance(org.kohsuke.stapler.StaplerRequest req, net.sf.json.JSONObject jsonObject) throws Descriptor.FormException {
             String pattern = null;
 
@@ -83,7 +86,6 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                 if (ZenTimestampFormatBuildWrapper.isConfigXMLWithPreviousVersion()) {
                     //Retrieve the current job by its name
                     String jobName = (String) req.getSubmittedForm().get("name");
-                    TopLevelItem topLevelItem = Hudson.getInstance().getItem(jobName);
 
                     // Retrieve the previous job zentimestamp wrapper pattern
                     Map<Descriptor<BuildWrapper>, BuildWrapper> mapWrappers = ((Project) (Items.getConfigFile(Hudson.getInstance().getItem(jobName)).read())).getBuildWrappers();
@@ -98,8 +100,8 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                     //Create a new job property object
                     return new ZenTimestampJobProperty(true, pattern);
                 }
-            } catch (Exception e) {
-                throw new RuntimeException("An error occurred during the migration of the previous plugin");
+            } catch (ServletException | IOException | RuntimeException e) {
+                throw new RuntimeException("An error occurred during the migration of the previous plugin", e);
             }
 
             return null;
@@ -114,8 +116,6 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
             try {
                 new SimpleDateFormat(value);
-            } catch (NullPointerException npe) {
-                return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(npe.getMessage()));
             } catch (IllegalArgumentException iae) {
                 return FormValidation.error(Messages.ZenTimestampFormatBuildWrapper_invalidInput(iae.getMessage()));
             }
