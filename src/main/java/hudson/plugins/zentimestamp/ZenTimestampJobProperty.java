@@ -1,5 +1,6 @@
 package hudson.plugins.zentimestamp;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.*;
@@ -63,6 +64,7 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
 
 
         @SuppressWarnings("unchecked")
+        @SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
         public ZenTimestampJobProperty newInstance(org.kohsuke.stapler.StaplerRequest req, net.sf.json.JSONObject jsonObject) throws Descriptor.FormException {
             String pattern = null;
 
