@@ -9,6 +9,7 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -97,8 +98,8 @@ public class ZenTimestampJobProperty extends JobProperty<Job<?, ?>> {
                     //Create a new job property object
                     return new ZenTimestampJobProperty(true, pattern);
                 }
-            } catch (Exception e) {
-                throw new RuntimeException("An error occurred during the migration of the previous plugin");
+            } catch (ServletException | IOException | RuntimeException e) {
+                throw new RuntimeException("An error occurred during the migration of the previous plugin", e);
             }
 
             return null;
