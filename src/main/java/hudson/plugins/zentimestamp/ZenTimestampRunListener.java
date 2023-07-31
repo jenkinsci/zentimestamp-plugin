@@ -33,10 +33,12 @@ public class ZenTimestampRunListener extends RunListener<Run> implements Seriali
 
         //Node
         Node node = build.getBuiltOn();
-        for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
-            if (nodeProperty instanceof ZenTimestampNodeProperty) {
-                ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
-                pattern = envInjectNodeProperty.getPattern();
+        if (node != null) {
+            for (NodeProperty<?> nodeProperty : node.getNodeProperties()) {
+                if (nodeProperty instanceof ZenTimestampNodeProperty) {
+                    ZenTimestampNodeProperty envInjectNodeProperty = (ZenTimestampNodeProperty) nodeProperty;
+                    pattern = envInjectNodeProperty.getPattern();
+                }
             }
         }
 
